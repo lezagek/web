@@ -79,31 +79,139 @@ print('\n Задание 2 \n', df)
 
 # print('\n Задание 3 \n', df)
 
+# df = pd.read_sql('''
+#                  SELECT
+#                      title AS Название, 
+#                      (
+#                             SELECT GROUP_CONCAT(author_name, ', ')
+#                             FROM (book_author
+#                                    JOIN author USING (author_id)) AS b
+#                             WHERE a.book_id = b.book_id
+#                      ) AS Автор
+#                  FROM (book_reader
+#                      JOIN book USING (book_id)
+#                      JOIN book_author USING (book_id)) AS a
+                 
+#                  WHERE reader_id = (
+#                             SELECT
+#                                    reader_id
+#                             FROM book_reader
+#                             GROUP BY reader_id
+#                             ORDER BY COUNT(reader_id) DESC
+#                             LIMIT 1
+#                      )
+#                  GROUP BY title
+#                  ''', con)
+
+# print('\n Задание 3 \n', df)
+
+# df = pd.read_sql('''
+#                  SELECT reader_id
+#                  FROM book_reader
+#                  GROUP BY reader_id
+#                  HAVING COUNT(reader_id) = (
+#                      SELECT MAX(count_reader)
+#                      FROM
+#                             (
+#                             SELECT
+#                                    reader_id, COUNT(reader_id) AS count_reader
+#                             FROM 
+#                                    book_reader
+#                             GROUP BY reader_id
+#                             ) query_in
+#                  )
+                 
+
+                 
+#                  ''', con)
+
+# print('\n Задание 3 \n', df)
+
+# df = pd.read_sql('''
+#                  SELECT title, reader_id
+#                  FROM
+#                      book INNER JOIN book_reader
+#                      on book.book_id = book_reader.book_id
+                 
+#                  ''', con)
+
+# print('\n Задание 3 \n', df)
+
 df = pd.read_sql('''
-                 SELECT
-                     title AS Название, 
-                     (
-                            SELECT GROUP_CONCAT(author_name, ', ')
-                            FROM (book_author
-                                   JOIN author USING (author_id)) AS b
-                            WHERE a.book_id = b.book_id
-                     ) AS Автор
+                 SELECT title AS Название,
+                 (
+                     SELECT GROUP_CONCAT(author_name, ', ')
+                     FROM (book_author
+                            JOIN author USING (author_id)) AS b
+                     WHERE a.book_id = b.book_id
+                 ) AS Автор
+
                  FROM (book_reader
                      JOIN book USING (book_id)
                      JOIN book_author USING (book_id)) AS a
-                 
                  WHERE reader_id = (
-                            SELECT
-                                   reader_id
-                            FROM book_reader
-                            GROUP BY reader_id
-                            ORDER BY COUNT(reader_id) DESC
-                            LIMIT 1
+                     SELECT reader_id
+                     FROM book_reader
+                     GROUP BY reader_id
+                     HAVING COUNT(reader_id) = (
+                            SELECT MAX(count_reader)
+                            FROM
+                                   (
+                                   SELECT
+                                          reader_id, COUNT(reader_id) AS count_reader
+                                   FROM 
+                                          book_reader
+                                   GROUP BY reader_id
+                                   ) query_in
                      )
-                 GROUP BY title
+                 )
+                 GROUP BY book_id
                  ''', con)
 
 print('\n Задание 3 \n', df)
+
+# df = pd.read_sql('''
+#                  SELECT reader_id
+#                  FROM
+#                      book_reader
+#                  GROUP BY reader_id
+#                  HAVING COUNT(reader_id) =
+#                      (
+#                             SELECT MAX(count_reader)
+#                             FROM
+#                                    (
+#                                    SELECT
+#                                           reader_id, COUNT(reader_id) AS count_reader
+#                                    FROM 
+#                                           book_reader
+#                                    GROUP BY reader_id
+#                                    ) query_in
+#                      )
+#                  ''', con)
+
+# print('\n Задание 3 \n', df)
+
+# df = pd.read_sql('''
+#                  SELECT title
+#                  FROM
+#                      book INNER JOIN book_reader
+#                      on book.book_id = book_reader.book_id
+#                  GROUP BY reader_id
+#                  HAVING COUNT(reader_id) =
+#                      (
+#                             SELECT MAX(count_reader)
+#                             FROM
+#                                    (
+#                                    SELECT
+#                                           reader_id, COUNT(reader_id) AS count_reader
+#                                    FROM 
+#                                           book_reader
+#                                    GROUP BY reader_id
+#                                    ) query_in
+#                      )
+#                  ''', con)
+
+# print('\n Задание 3 \n', df)
 
 # df = pd.read_sql('''
 #                  SELECT
@@ -325,12 +433,12 @@ df = pd.read_sql('''
 
 print('\n Задание 5 \n', df)
 
-df = pd.read_sql('''
-              WITH popular_books AS (
-              )     
-                 ''', con)
+# df = pd.read_sql('''
+#               WITH popular_books AS (
+#               )     
+#                  ''', con)
 
-print('\n Задание 5 \n', df)
+# print('\n Задание 5 \n', df)
 
 # df = pd.read_sql('''
 #                  SELECT DISTINCT
