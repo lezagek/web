@@ -369,72 +369,237 @@ print('\n Задание 4 \n', df)
 
 # print('\n Задание 5 \n', df)
 
+# df = pd.read_sql('''
+#               WITH popular_books AS (
+#               SELECT 
+#                      b.title AS Название,
+#                      GROUP_CONCAT(DISTINCT a.author_name) AS Авторы,
+#                      ROW_NUMBER() OVER (
+#                      PARTITION BY a.author_name 
+#                      ORDER BY 
+#                             COUNT(*) DESC, 
+#                             MAX(g.genre_count) DESC, 
+#                             b.available_numbers DESC
+#                      ) AS rn
+#               FROM 
+#                      book b
+#                      JOIN book_author ba ON b.book_id = ba.book_id
+#                      JOIN author a ON ba.author_id = a.author_id
+#                      JOIN (
+#                             SELECT 
+#                                    br.book_id,
+#                                    COUNT(*) AS genre_count
+#                             FROM 
+#                                    book_reader br
+#                                    JOIN book b1 ON br.book_id = b1.book_id
+#                             GROUP BY 
+#                                    br.book_id
+#                      ) g ON b.book_id = g.book_id
+#                      JOIN book_reader br ON b.book_id = br.book_id
+#               GROUP BY 
+#                      ba.book_id, b.title
+#               ),
+#               genre_counts AS (
+#               SELECT 
+#                      genre_id,
+#                      COUNT(*) AS genre_count
+#               FROM 
+#                      book_reader br
+#                      JOIN book b ON br.book_id = b.book_id
+#               GROUP BY 
+#                      genre_id
+#               )
+#               SELECT 
+#               Название,
+#               Авторы AS Автор
+#               FROM 
+#               (
+#                      SELECT 
+#                      p.Название,
+#                      p.Авторы,
+#                      ROW_NUMBER() OVER (
+#                             PARTITION BY p.Авторы 
+#                             ORDER BY 
+#                             p.rn
+#                      ) AS row_num
+#                      FROM 
+#                      popular_books p
+#               ) ranked_books
+#               WHERE 
+#               row_num = 1
+#               ORDER BY 
+#               Автор ASC, Название ASC;          
+#                  ''', con)
+
+# print('\n Задание 5 \n', df)
+
 df = pd.read_sql('''
-              WITH popular_books AS (
-              SELECT 
-                     b.title AS Название,
-                     GROUP_CONCAT(DISTINCT a.author_name) AS Авторы,
-                     ROW_NUMBER() OVER (
-                     PARTITION BY a.author_name 
-                     ORDER BY 
-                            COUNT(*) DESC, 
-                            MAX(g.genre_count) DESC, 
-                            b.available_numbers DESC
-                     ) AS rn
-              FROM 
-                     book b
-                     JOIN book_author ba ON b.book_id = ba.book_id
-                     JOIN author a ON ba.author_id = a.author_id
-                     JOIN (
-                            SELECT 
-                                   br.book_id,
-                                   COUNT(*) AS genre_count
-                            FROM 
-                                   book_reader br
-                                   JOIN book b1 ON br.book_id = b1.book_id
-                            GROUP BY 
-                                   br.book_id
-                     ) g ON b.book_id = g.book_id
-                     JOIN book_reader br ON b.book_id = br.book_id
-              GROUP BY 
-                     ba.book_id, b.title
+              WITH get_reader_book(book_id, pop_book)
+              AS (
+                     SELECT book_id, COUNT(book_id) AS pop_book
+                     FROM book_reader
+                            JOIN book USING (book_id)
+                     GROUP BY book_id
               ),
-              genre_counts AS (
-              SELECT 
-                     genre_id,
-                     COUNT(*) AS genre_count
-              FROM 
-                     book_reader br
-                     JOIN book b ON br.book_id = b.book_id
-              GROUP BY 
-                     genre_id
+              get_genre(genre_id, genre_num)
+              AS (
+                 SELECT genre_id, COUNT(genre_id) AS genre_num
+                     FROM genre
+                            JOIN book USING (genre_id)
+                            JOIN book_reader USING (book_id)
+                     GROUP BY genre_id
+              ),
+              
+              get_book(author_name, title, available_numbers, genre_id, genre_num, pop_book) 
+              AS (
+                 SELECT
+                 (
+                     SELECT GROUP_CONCAT(author_name, ', ')
+                     FROM (book_author
+                            JOIN author USING (author_id)) AS b
+                     WHERE a.book_id = b.book_id
+                 ) AS Автор,
+                 title, available_numbers, book.genre_id, genre_num, pop_book
+                 FROM (author
+                     JOIN book_author USING (author_id)
+                     JOIN book USING (book_id)
+                     JOIN get_reader_book USING (book_id)
+                     JOIN get_genre USING (genre_id)) AS a
+                 GROUP BY Автор, title
               )
-              SELECT 
-              Название,
-              Авторы AS Автор
-              FROM 
-              (
-                     SELECT 
-                     p.Название,
-                     p.Авторы,
-                     ROW_NUMBER() OVER (
-                            PARTITION BY p.Авторы 
-                            ORDER BY 
-                            p.rn
-                     ) AS row_num
-                     FROM 
-                     popular_books p
-              ) ranked_books
-              WHERE 
-              row_num = 1
-              ORDER BY 
-              Автор ASC, Название ASC;          
+              
+              SELECT *
+              FROM get_book
                  ''', con)
+
 
 print('\n Задание 5 \n', df)
 
 # df = pd.read_sql('''
-#               WITH popular_books AS (
+#               WITH get_genre(genre_id, genre_num)
+#               AS (
+#                      SELECT genre_id, COUNT(genre_id) AS genre_num
+#                      FROM genre
+#                             JOIN book USING (genre_id)
+#                             JOIN book_reader USING (book_id)
+#                      GROUP BY genre_id
+#               )
+#               SELECT *
+#               FROM get_genre
+#                  ''', con)
+
+# print('\n Задание 5 \n', df)
+
+# df = pd.read_sql('''
+#               WITH get_reader_book(book_id, title, pop_book)
+#               AS (
+#                      SELECT book_id, title, COUNT(book_id)
+#                      FROM book_reader
+#                             JOIN book USING (book_id)
+#                      GROUP BY book_id
+#               )
+#               SELECT *
+#               FROM get_reader_book
+#                  ''', con)
+
+# print('\n Задание 5 \n', df)
+
+#ДЛЯ ПРОВЕРКИ
+
+df = pd.read_sql('''
+              WITH get_reader_book(book_id, pop_book)
+              AS (
+                     SELECT book_id, COUNT(book_id) AS pop_book
+                     FROM book_reader
+                            JOIN book USING (book_id)
+                     GROUP BY book_id
+              ),
+              get_genre(genre_id, genre_num)
+              AS (
+                 SELECT genre_id, COUNT(genre_id) AS genre_num
+                     FROM genre
+                            JOIN book USING (genre_id)
+                            JOIN book_reader USING (book_id)
+                     GROUP BY genre_id
+              ),
+              
+              get_book(Автор, title, available_numbers, genre_id, genre_num, pop_book) 
+              AS (
+                 SELECT
+                 (
+                     SELECT GROUP_CONCAT(author_name, ', ')
+                     FROM (book_author
+                            JOIN author USING (author_id)) AS b
+                     WHERE a.book_id = b.book_id
+                 ) AS Автор,
+                 title, available_numbers, book.genre_id, genre_num, pop_book
+                 FROM (author
+                     JOIN book_author USING (author_id)
+                     JOIN book USING (book_id)
+                     JOIN get_reader_book USING (book_id)
+                     JOIN get_genre USING (genre_id)) AS a
+                 GROUP BY Автор, title
+              )
+              
+              SELECT DISTINCT
+                 Автор,
+                 FIRST_VALUE(title) OVER win_book AS Книга
+              FROM get_book
+              WINDOW win_book
+              AS(
+                 PARTITION BY Автор
+                 ORDER BY pop_book DESC, genre_num DESC, available_numbers DESC
+              )
+              ORDER BY Автор, Книга
+                 ''', con)
+
+
+print('\n Задание 5 \n', df)
+
+# df = pd.read_sql('''
+#               SELECT book_id, reader_id, borrow_date
+#               FROM book_reader
+#               ORDER BY book_id
+#                  ''', con)
+
+# print('\n Задание 5 \n', df)
+
+# df = pd.read_sql('''
+#               SELECT title, genre_name, reader_id
+#               FROM genre
+#                      JOIN book USING (genre_id)
+#                      JOIN book_reader USING (book_id)
+#               ORDER BY genre_name
+#                  ''', con)
+
+# print('\n Задание 5 \n', df)
+
+# df = pd.read_sql('''
+#               WITH get_book(author_name, title, available_numbers, genre_name, reader_id, borrow_amount) 
+#               AS (
+#                  SELECT
+#                  (
+#                      SELECT GROUP_CONCAT(author_name, ', ')
+#                      FROM (book_author
+#                             JOIN author USING (author_id)) AS b
+#                      WHERE a.book_id = b.book_id
+#                  ) AS Автор,
+#                  title, available_numbers, genre_name, reader_id, COUNT(borrow_date)
+#                  FROM (author
+#                      JOIN book_author USING (author_id)
+#                      JOIN book USING (book_id)
+#                      JOIN book_reader USING (book_id)
+#                      JOIN genre USING (genre_id)) AS a
+#                  GROUP BY Автор, title, reader_id
+#               )
+#               SELECT 
+#                  Автор
+#                  FIRST_VALUE() OVER win_book AS Книга
+#               FROM get_book
+#               WINDOW win_book
+#               AS (
+#                  PARTITION BY Автор
+#                  ORDER BY borrow_amount DESC, 
 #               )     
 #                  ''', con)
 
