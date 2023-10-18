@@ -1,0 +1,29 @@
+<html>     
+    <head>         
+        <title> Пример JINJA2 </title>     
+    </head> 
+    <body>     
+        <p>         
+            Привет, 
+            {% if users['gender'] == "ж" %}
+                студентка
+            {% else %}
+                студент
+            {% endif %}
+            {{add_spaces(users['name'])}}!
+        </p>
+        <p>
+            Ваша образовательная программа {{users['program']}}
+        </p>
+        <p>
+            Вы изучаете дисциплины: <br>
+            {% for dis in users['subjects'] %}
+                {% if dis == users['subjects'][-1] %}
+                    {{dis}}.
+                {% else %}
+                    {{dis}},
+                {% endif %}
+            {% endfor %}
+        </p>  
+    </body> 
+</html> 
