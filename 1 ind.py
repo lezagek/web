@@ -1,5 +1,5 @@
 import sqlite3  
-import pandas as pd 
+import pandas as pd
 
 # создаем базу данных и устанавливаем соединение с ней
 con = sqlite3.connect("library.sqlite")
