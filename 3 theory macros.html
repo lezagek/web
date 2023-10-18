@@ -1,0 +1,9 @@
+{% macro render_list(list) %}
+    {% for item in list %}
+        {% if item == list[-1] %}
+            <li>{{item}}.</li>
+        {% else %}
+            <li>{{item}},</li>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

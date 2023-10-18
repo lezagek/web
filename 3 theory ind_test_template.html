@@ -1,0 +1,32 @@
+{% import "3 theory macros.html" as macros %}
+<html>     
+    <head>         
+        <title> Пример JINJA2 </title>     
+    </head> 
+    <body>     
+        <p>         
+            Привет, 
+            {% if users['gender'] == "ж" %}
+                студентка
+            {% else %}
+                студент
+            {% endif %}
+            <font color="green"><b>{{add_spaces(users['name'])}}!</b></font>  
+        </p>
+        <p>
+            Ваша образовательная программа <b>
+            {% if users['program'] == "Бизнес-информатика" %}
+                38.03.05
+            {% else %}
+                38.03.01
+            {% endif %}
+            {{add_spaces(users['program'])}}</b>
+        </p>
+        <p>
+            Вы изучаете {{right_dis(users['subjects'] |length)}}: <br>
+            <ul>
+                {{macros.render_list(users['subjects'])}}
+            </ul>
+        </p>  
+    </body> 
+</html> 
