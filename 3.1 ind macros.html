@@ -1,0 +1,5 @@
+{% macro create_input(name, list) %}
+    {% for item in list %}
+        <input type="number" name="{{name}}_{{list.index(item)}}" value="{{item}}"/> 
+    {% endfor %}
+{% endmacro %}
