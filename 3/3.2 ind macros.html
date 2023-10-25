@@ -1,0 +1,26 @@
+{% macro create_table(list, first_row, last_row) %}
+    <table border = "1" cellpadding = "5" cellspacing = "0">
+        <tr>
+            <th>x</th>
+            <th>f(x)</th>
+            <th>y(x)</th>
+        </tr>
+        {% if first_row < 1 or last_row > list |length %}
+            {% for item in list %}
+                <tr>
+                    <td>{{item["x"]}}</td>
+                    <td>{{item["f(x)"]}}</td>
+                    <td>{{item["y(x)"]}}</td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            {% for i in range(first_row - 1, last_row) %}
+                <tr>
+                    <td>{{list[i]["x"]}}</td>
+                    <td>{{list[i]["f(x)"]}}</td>
+                    <td>{{list[i]["y(x)"]}}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </table>
+{% endmacro %}
