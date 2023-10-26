@@ -5,7 +5,7 @@
             <th>f(x)</th>
             <th>y(x)</th>
         </tr>
-        {% if first_row < 1 or last_row > list |length %}
+        {% if first_row < 1 or last_row > list |length or first_row > last_row %}
             {% for item in list %}
                 <tr>
                     <td>{{item["x"]}}</td>
