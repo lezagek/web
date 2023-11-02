@@ -1,0 +1,21 @@
+div {
+    margin: 10px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table th {
+    font-weight: bold;
+    padding: 5px;
+    background: #efefef;
+    border: 1px solid #dddddd;
+}
+
+.flex {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: space-between;
+    justify-content: space-evenly;
+}
