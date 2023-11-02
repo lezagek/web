@@ -1,0 +1,16 @@
+<html>     
+    <head>         
+        <title> Карточка читателя </title>
+        {% from "reader_book_macros.html" import render_table, create_select %}
+    </head> 
+    <body>
+        <p>        
+            <form>         
+                Читатель:           
+                {{create_select(combo_box, reader_id)}}
+                <input type="submit" value="Найти">         
+            </form>       
+        </p>
+        {{render_table(Карточка, book_reader)}}
+    </body> 
+</html> 
