@@ -1,0 +1,21 @@
+<html>     
+    <head>         
+        <title> Книги по жанру </title>
+        <link rel="stylesheet" href="lib.css">
+        {% from "book_genre_macros.html" import render_table, create_select %}
+    </head> 
+    <body>
+        <p>        
+            <form>         
+                Жанр:           
+                {{create_select(combo_box, reader_id)}}
+                <input type="submit" value="Найти">
+                Мало:
+                <input type="number" value="{{lower_limit}}">
+                Много:
+                <input type="number" value="{{upper_limit}}">         
+            </form>       
+        </p>
+        {{render_table(Карточка, book_genre)}}
+    </body> 
+</html> 

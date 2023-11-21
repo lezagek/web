@@ -1,0 +1,24 @@
+.style_table{
+    float: left;
+    margin: 0 10px;
+}
+
+.style_table p{
+    text-align: center;
+}
+
+.style_table table{
+    border: #dbdbdb 2px solid;
+}
+
+.style_table th{
+    background-color: #dbdbdb;
+}
+
+.style_table td{
+    padding: 5px;
+}
+
+.style_table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}

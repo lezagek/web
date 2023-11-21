@@ -1,0 +1,43 @@
+{% macro render_table(table_name, relation) %}
+    <div class="style_table"> 
+        <p>        
+            <b>{{table_name}} </b>     
+        </p>       
+        {% set n = relation|length %}    
+        <table>               
+            <tr>         
+                {% for name in relation.dtypes.index %}             
+                <th>{{name}}</th>         
+                {% endfor %}         
+            </tr>            
+
+            <tbody>             
+                {% for i in range(n) %}                
+                <tr>                      
+                    {% for name in relation.dtypes.index %}               
+                    <td>
+                        {{ relation.loc[i, name] }} 
+                    </td>            
+                    {% endfor %}          
+                </tr>         
+                {% endfor %}         
+            </tbody>          
+        </table>
+    </div>
+{% endmacro %}
+
+{% macro create_select(combo_box, genre_id) %}
+    <select name="genre">         
+        {% set n = combo_box| length %}         
+        {% for i in range(n) %}            
+            {% set id_r = combo_box.loc[i, "genre_id"] %}                         
+            {% if id_r == genre_id %}                              
+                <option selected value={{id_g}}>             
+            {% else %}                
+                <option  value={{id_g}}>             
+            {% endif %}                            
+            {{ combo_box.loc[i, "genre_name"] }}              
+            </option>         
+        {% endfor %}           
+    </select>            
+{% endmacro %}
