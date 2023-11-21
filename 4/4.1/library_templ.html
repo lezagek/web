@@ -1,11 +1,11 @@
 <html>     
     <head>         
-        <title> Дамп базы данных </title>   
-        <link rel="stylesheet" href="lib_css.css">
+        <title> Дамп базы данных </title>
+        <link rel="stylesheet" href="lib.css">
         {% from "lib_macros.html" import render_table %}
     </head> 
     <body>
-        <div class="flex">     
+        <div>     
             {% for key, value in tables.items() %}
                 {{render_table(key, value)}}
             {% endfor %}
