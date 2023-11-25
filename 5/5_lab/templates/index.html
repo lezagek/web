@@ -1,0 +1,66 @@
+<!DOCTYPE HTML> 
+<html>     
+    <head>         
+        <title> Приветствие </title>          
+    </head> 
+    <body>        
+        <form method="post">        
+            <p>Имя: <input type = text name=username value="{{name}}" required="required"></p>    
+            <p>Пол:<br>          
+                <input  type = radio  name=gender value=w> Ж <br> 
+                <input  type = radio  name=gender value=m> M         
+            </p>     
+            <p>
+                Образовательная программа:         
+                <select name=program>         
+                    {% for i in range(len(program_list)) %}
+                        <option value={{i}} {% if program_list[i] == program %}selected{% endif %}>{{program_list[i]}}</option>         
+                    {% endfor %}
+                </select>
+            </p>
+            <p>           
+                Выберите дисциплины, которые Вы изучаете:<br>           
+                {% for i in range(len(subject_list)) %}             
+                    <input  type = checkbox  name=subject_list value={{i}}>              
+                    {{subject_list[i]}}<br>           
+                {% endfor %}        
+            </p>  
+
+            <p>
+                <input type=submit value=Отправить name="action" required="required">
+                <input type=submit value=Очистить name="action" required="required">
+            </p>
+            
+            
+        </form>    
+
+        {% if name %}
+            <p>        
+                Привет, 
+                {% if gender == "m" %}          
+                    студент        
+                {% elif gender == "w" %}           
+                    студентка        
+                {% endif %} 
+                {{name}}!     
+            </p> 
+            <p>
+                Ваша образовательная программа: {{program}}. 
+            </p>
+            {% if len(subjects_select) == 0 %}
+                <p>
+                    Вы не изучаете никаких дисциплин
+                </p>
+            {% else %}
+                <p>       
+                    Вы изучаете дисциплины:
+                    {% for sub in subjects_select %}          
+                        <a href={{ url_for('subject', sub=sub) }}> {{sub}}</a>,        
+                    {% endfor %}      
+                </p>
+
+            {% endif %}
+        {% endif %}
+
+    </body>    
+</html> 
