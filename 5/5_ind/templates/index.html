@@ -1,0 +1,56 @@
+<!DOCTYPE HTML> 
+<html>
+    <head>
+        <title>Калькулятор</title>
+    </head>
+    <body>
+        <form method="post">
+            <p>
+                Размер векторов: <input type="number" name=num value="{{num}}">
+                <input type=submit value=Показать name="action">
+            </p>
+
+            {% if num != 0 %}
+                <p>
+                    Вектор 1:
+                    {% for i in range(int(num)) %}
+                        <input type="number" name=vector_first value="{{vector_first[i]}}">
+                    {% endfor %}
+                </p>
+                <p>
+                    Вектор 2:
+                    {% for i in range(int(num)) %}
+                        <input type="number" name=vector_second value="{{vector_second[i]}}">
+                    {% endfor %}
+                </p>
+                
+                <p>
+                    Выберите операцию(ии):<br>
+                    {% for i in range(len(operations_list)) %}             
+                        <input  type=checkbox  name=operations_list value={{i}}>              
+                        {{operations_list[i]}}<br>           
+                    {% endfor %}
+                </p>
+
+                <p>
+                    <input type=submit value=Вычислить name="action" required="required">
+                    <input type=submit value=Очистить name="action" required="required">
+                </p>
+            {% endif %}
+        </form>
+
+        {% if len(operations_select) != 0 %}
+            {% for id, op in enumerate(operations_select) %}
+                <p>
+                    <b>{{op}}:</b><br>
+                    {% if op == 'Произведение' and len(vector_first) != 3 %}
+                        Векторное произведение считается только для трехмерных векторов!
+                    {% else %}
+                        {{res[id]}}
+                    {% endif %}
+                </p>
+            {% endfor %}            
+        {% endif %} 
+
+    </body>
+</html>
