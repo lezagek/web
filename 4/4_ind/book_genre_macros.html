@@ -30,8 +30,8 @@
     <select name="genre">         
         {% set n = combo_box| length %}         
         {% for i in range(n) %}            
-            {% set id_r = combo_box.loc[i, "genre_id"] %}                         
-            {% if id_r == genre_id %}                              
+            {% set id_g = combo_box.loc[i, "genre_id"] %}                         
+            {% if id_g == genre_id %}                              
                 <option selected value={{id_g}}>             
             {% else %}                
                 <option  value={{id_g}}>             

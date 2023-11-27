@@ -7,8 +7,8 @@ from book_genre_model import get_genre, get_book_genre
 genre_id = 3
 
 # задаем нижнюю границу для "мало" и верхнюю для "много"
-lower_limit = 3
-upper_limit = 5
+lower_limit = 1
+upper_limit = 3
 
 # устанавливаем соединение с базой данных (базу данных взять из ЛР 1) 
 conn = sqlite3.connect("library.sqlite")  
