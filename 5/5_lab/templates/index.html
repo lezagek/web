@@ -7,8 +7,8 @@
         <form method="post">        
             <p>Имя: <input type = text name=username value="{{name}}" required="required"></p>    
             <p>Пол:<br>          
-                <input  type = radio  name=gender value=w> Ж <br> 
-                <input  type = radio  name=gender value=m> M         
+                <input  type = radio  name=gender value=w {% if gender == "w" %}checked="checked"{% endif %}> Ж <br> 
+                <input  type = radio  name=gender value=m {% if gender == "m" %}checked="checked"{% endif %}> M         
             </p>     
             <p>
                 Образовательная программа:         
@@ -21,7 +21,7 @@
             <p>           
                 Выберите дисциплины, которые Вы изучаете:<br>           
                 {% for i in range(len(subject_list)) %}             
-                    <input  type = checkbox  name=subject_list value={{i}}>              
+                    <input  type = checkbox  name=subject_list value={{i}} {% if subject_list[i] in subjects_select %} checked="checked" {% endif %}>              
                     {{subject_list[i]}}<br>           
                 {% endfor %}        
             </p>  
