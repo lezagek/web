@@ -27,7 +27,7 @@
                 <p>
                     Выберите операцию(ии):<br>
                     {% for i in range(len(operations_list)) %}             
-                        <input  type=checkbox  name=operations_list value={{i}}>              
+                        <input  type=checkbox  name=operations_list value={{i}} {% if operations_list[i] in operations_select %} checked="checked" {% endif %}>              
                         {{operations_list[i]}}<br>           
                     {% endfor %}
                 </p>
